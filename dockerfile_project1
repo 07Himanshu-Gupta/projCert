@@ -1,7 +1,7 @@
-  FROM devopsedu/webapp:latest
+FROM devopsedu/webapp 
 
-    RUN apt-get update 
+ADD website /var/www/html
 
-    RUN apt-get install -y vim 
+RUN rm /var/www/html/index.html
 
-    RUN wget https://github.com/ajaygaharana/projCert/tree/master/website 
+CMD apachectl -D FOREGROUND
