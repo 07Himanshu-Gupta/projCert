@@ -1,0 +1,7 @@
+  FROM devopsedu/webapp:latest
+
+    RUN apt-get update 
+
+    RUN apt-get install -y vim 
+
+    RUN wget https://github.com/ajaygaharana/projCert/tree/master/website 
