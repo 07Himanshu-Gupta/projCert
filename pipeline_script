@@ -1,0 +1,34 @@
+pipeline {
+agent any
+stages {
+    stage('Job1_install_puppet_agent_ansible') {
+	    steps {
+		    echo 'installing puppet agent......'
+		    sh script: 'sudo su devops -c "ansible-playbook /home/edureka/playbooks/install_puppet_agent.yaml"'	
+	    }		
+    }
+    stage('Job2_install_docker_ansible') {
+	    steps {
+		    echo 'installing docker......'
+		    sh script: 'sudo su devops -c "ansible-playbook /home/edureka/playbooks/docker.yml"'	
+	    }		
+    }
+
+    stage('Job3_build_push_docker_image_and_deploy') {
+	   steps {
+	        git credentialsId: '57c841da-643a-4dd4-814e-072fa92ef31c', url: 'https://github.com/ajaygaharana/projCert'
+			sh script: 'cd $WORKSPACE'
+			sh script: 'docker build -f /home/edureka/projCert/dockerfile_project1 -t ajaygaharana1/edureka_project:$BUILD_NUMBER .'
+			sh script: 'docker login -u ajaygaharana1 -p Password@1'
+			sh script: 'docker push ajaygaharana1/edureka_project:$BUILD_NUMBER'
+              }	
+           	
+    }
+    stage('Job4_deploy_on_Test') {
+	    steps {
+			sh script: 'cp /home/edureka/playbooks/deploy_test.yml ./'
+			sh script: 'sudo su devops -c "ansible-playbook deploy_test.yml"'              
+	    }
+    }
+}
+}
