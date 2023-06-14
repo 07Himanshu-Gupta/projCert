@@ -1,0 +1,16 @@
+- name: Deploy docker image 
+
+  hosts: Test
+
+  become: yes
+
+  tasks:
+          #    - name: Log into DockerHub
+          #docker_login:
+          #username: ajaygaharana1
+          #password: Password@1
+
+    - name: Run docker container
+      command: "docker run -d -P ajaygaharana1/edureka_project:7"
+      register: out
+    - debug: var=out
